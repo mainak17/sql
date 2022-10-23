@@ -28,3 +28,14 @@ GROUP BY u.city
 order by count(*) desc
 limit 3;
 
+--Final Account Balance
+select account_id, sum(amt) as final_balance
+from
+(select *,
+CASE
+    WHEN transaction_type='Deposit' THEN amount*1
+    WHEN transaction_type='Withdrawal' then amount*-1
+END AS amt 
+from transactions
+) tbl
+group by account_id;
