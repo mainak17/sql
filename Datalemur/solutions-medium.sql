@@ -24,3 +24,16 @@ LEFT JOIN
 (SELECT title, avg(salary) from employee_pay GROUP BY title) sal
 on ep.title = sal.title) tbl ) tbl1
 where status is not null;
+
+--Odd and Even Measurements
+select measurement_day,
+SUM(case when mod(rnk,2)!=0 then measurement_value else 0 end) as odd_sum,
+SUM(case when mod(rnk,2)=0 then measurement_value else 0 end) as even_sum
+from
+(
+select *,date(measurement_time) as measurement_day,
+  row_number() over(PARTITION BY date(measurement_time) order by measurement_time) as rnk 
+from measurements
+)
+tbl
+group by measurement_day;
