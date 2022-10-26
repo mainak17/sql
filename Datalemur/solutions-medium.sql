@@ -37,3 +37,15 @@ from measurements
 )
 tbl
 group by measurement_day;
+
+--Highest-Grossing Items
+select category,product,total_spend from (
+select *,
+row_number() over (partition by category order by total_spend desc) as rnk from (
+  SELECT category,product,sum(spend) as total_spend from (
+      SELECT *
+      FROM product_spend
+      where EXTRACT('year' from transaction_date)=2022
+    ) tbl
+group by category,product) tbl ) tbl1
+WHERE rnk in(1,2);
