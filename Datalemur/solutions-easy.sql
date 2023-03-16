@@ -39,3 +39,10 @@ END AS amt
 from transactions
 ) tbl
 group by account_id;
+
+## Pharmacy Analytics (Part 3) [CVS Health SQL Interview Question]
+SELECT manufacturer,
+concat('$'|| round(sum(total_sales)/1000000,0) || ' million') as sale
+FROM pharmacy_sales
+GROUP BY manufacturer
+ORDER BY round(sum(total_sales)/1000000,0) desc;
